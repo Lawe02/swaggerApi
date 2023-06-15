@@ -8,11 +8,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Azure;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("/")]
+[EnableCors("AllowAl")]
 
 public class AdsController : ControllerBase
 {
@@ -21,7 +24,7 @@ public class AdsController : ControllerBase
     {
         _dbContext = dbContext;
     }
-        // READ ALL ///////////////////////////////////////////////////////
+    // READ ALL ///////////////////////////////////////////////////////
     /// <summary>
     /// Retrieve ALL adverts from the database
     /// </summary>
@@ -31,7 +34,6 @@ public class AdsController : ControllerBase
     /// <remarks>
     /// Example end point: GET /api/Ads
     /// </remarks>
-
     [HttpGet(Name = "GetAds")]
     public async Task<ActionResult<List<Ads>>> GetAll()
     {
@@ -49,7 +51,7 @@ public class AdsController : ControllerBase
     /// <remarks>
     /// Eaxmple end point: Get /api/Ads?id=4
     /// </remarks>
-
+    [Authorize(Roles = "Admin, User")]
     [HttpGet("{id}", Name = "GetAd")]
     public async Task<ActionResult<Ads>> GetAd(int id)
     {
@@ -72,7 +74,7 @@ public class AdsController : ControllerBase
     /// <remarks>
     /// Eaxmple end point: Post /api/Ads
     /// </remarks>
-
+    [Authorize(Roles ="Admin, User")]
     [HttpPost(Name = "CreateAd")]
     public async Task<ActionResult<Ads>> CreateAd(Ads newAd)
     {
@@ -93,7 +95,9 @@ public class AdsController : ControllerBase
     /// <remarks>
     /// Eaxmple end point: Get /api/Ads?id=4
     /// </remarks>
+    /// 
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id}",Name = "DeleteAd")]
     public async Task<ActionResult<Ads>> DeleteAd(int id)
     {
@@ -106,7 +110,7 @@ public class AdsController : ControllerBase
         _dbContext.SaveChanges();
         return Ok("Deleted "+adToDelete);   
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id}",Name = "Update")]
     public async Task<IActionResult> UpateAdvert(int id, Ads advert)
     {
@@ -123,6 +127,7 @@ public class AdsController : ControllerBase
         await _dbContext.SaveChangesAsync();
         return Ok(advertToUpdate);
     }
+    [Authorize(Roles = "Admin")]
     [HttpPatch]
     [Route("id")]
     public async Task<ActionResult<Ads>> PatchAdd(Microsoft.AspNetCore.JsonPatch.JsonPatchDocument advert, int id)

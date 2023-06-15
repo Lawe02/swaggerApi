@@ -6,20 +6,30 @@ using Microsoft.EntityFrameworkCore;
 using api.Models;
 
 namespace api.Data
-{
+{    
+    /// <summary>
+     /// Class responsible for initializing data in the application.
+     /// </summary>
+
     public class DataInitializer
     {
         private readonly ApplicationDbContext _dbContext;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DataInitializer"/> class.
+        /// </summary>
+        /// <param name="dbContext">The application database context.</param>
         public DataInitializer(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-        }       
-
+        }
+        /// <summary>
+        /// Migrates the database and seeds initial data.
+        /// </summary>
         public void MigrateData()
         {
             _dbContext.Database.Migrate();
             SeedData();
+
         }
 
         private void SeedData()
