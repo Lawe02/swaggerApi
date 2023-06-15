@@ -17,17 +17,6 @@ builder.Services.AddEndpointsApiExplorer();
 // Added general description for Swagger
 builder.Services.AddSwaggerGen(sw =>
 {
-    sw.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
-    {
-        Version = "v1.0",
-        Title = "My Superhero API",
-        Description = @"API for retrieving Superheroes",
-        Contact = new OpenApiContact
-        {
-            Name = "Richard Chalk",
-            Email = "richard.chalk@systementor.se",
-        },
-    });
     // Needed for authorisation ========================================================
     sw.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
